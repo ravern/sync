@@ -5,6 +5,7 @@ defmodule Sync.Repo.Migrations.CreateDecks do
     create table(:decks) do
       add :title, :string
       add :slug, :string
+      add :password, :string
 
       timestamps()
     end

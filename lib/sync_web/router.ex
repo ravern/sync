@@ -16,11 +16,7 @@ defmodule SyncWeb.Router do
   scope "/", SyncWeb do
     pipe_through :browser # Use the default browser stack
 
+    post "/decks", DeckController, :create
     get "/", DeckController, :new
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", SyncWeb do
-  #   pipe_through :api
-  # end
 end

@@ -3,5 +3,19 @@ defmodule Sync.Decks do
   Interface for decks.
   """
 
-  import Ecto.Query, warn: false
+  alias Sync.Repo
+  alias Sync.Decks.Deck
+
+  def change_deck(deck \\ %Deck{}) do
+    Deck.changeset(deck, %{})
+  end
+
+  @doc """
+  Creates a new deck.
+  """
+  def create_deck(attrs) do
+    %Deck{}
+    |> Deck.changeset(attrs)
+    |> Repo.insert()
+  end
 end

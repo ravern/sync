@@ -1,1 +1,32 @@
-<h1>Hello</h1>
+<h2 class="mt-4">Realtime image sync</h2>
+<p class="mb-0">With this app, you can upload a series of pictures, and let it play on other devices in complete sync with the main device.</p>
+<small class="text-danger">Do not upload sensitive data, passwords are stored in plaintext.</small>
+
+<%= form_for @changeset, deck_path(@conn, :create), [class: "mt-4"], fn f-> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      You probably messed up your input.
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :title %>
+    <%= text_input f, :title, class: "form-control" %>
+    <%= error_tag f, :title %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :slug %>
+    <%= text_input f, :slug, class: "form-control", placeholder: "my-example-slug" %>
+    <small class="text-muted">should only contain lowercase, uppercase letters, hyphens and underscores.</small><br>
+    <%= error_tag f, :slug %>
+  </div>
+
+  <div class="form-group mb-4">
+    <%= label f, :password %>
+    <%= password_input f, :password, class: "form-control" %>
+    <%= error_tag f, :password %>
+  </div>
+
+  <%= submit "Create new deck", class: "btn btn-primary" %>
+<% end %>
