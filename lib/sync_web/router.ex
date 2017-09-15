@@ -18,7 +18,10 @@ defmodule SyncWeb.Router do
 
     resources "/sessions", SessionController, only: [:create]
     get "/:slug", SessionController, :show
-    resources "/decks", DeckController, only: [:create, :show], param: "slug"
+
+    # Decks
+    resources "/decks", DeckController, only: [:create, :show]
+    post "/decks/verify", DeckController, :verify
     get "/", DeckController, :new
   end
 end

@@ -3,11 +3,10 @@ defmodule Sync.Decks.Deck do
   import Ecto.Changeset
   alias Sync.Decks.Deck
 
-  @slug_format ~r/[a-zA-Z_-]+/
+  # @slug_format ~r/[a-zA-Z_-]+/
 
   schema "decks" do
     field :title, :string
-    field :slug, :string
     field :password, :string
 
     timestamps()
@@ -16,9 +15,9 @@ defmodule Sync.Decks.Deck do
   @doc false
   def changeset(%Deck{} = deck, attrs) do
     deck
-    |> cast(attrs, [:title, :slug, :password])
-    |> validate_required([:title, :slug])
-    |> validate_format(:slug, @slug_format)
-    |> unique_constraint(:slug)
+    |> cast(attrs, [:title, :password])
+    |> validate_required([:title])
+    |> unique_constraint(:title)
+    # |> validate_format(:slug, @slug_format)
   end
 end

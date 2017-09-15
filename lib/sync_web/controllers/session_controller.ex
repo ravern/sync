@@ -2,8 +2,6 @@ defmodule SyncWeb.SessionController do
   use SyncWeb, :controller
   alias Sync.{Sessions, Decks}
 
-  plug :scrub_params, "deck" when action in [:create]
-
   def create(conn, %{"deck" => %{"slug" => slug, "password" => password}}) do
     deck = Decks.find_deck!(slug)
     if password == deck.password do

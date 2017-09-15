@@ -10,20 +10,20 @@
   <% end %>
 
   <div class="form-group">
-    <%= label f, :title %>
+    <%= label f, :title %><span class="text-danger">*</span>
     <%= text_input f, :title, class: "form-control" %>
     <%= error_tag f, :title %>
   </div>
 
-  <div class="form-group">
-    <%= label f, :slug %>
-    <div class="input-group">
-      <div class="input-group-addon"><%= SyncWeb.Endpoint.url() %></div>
-      <%= text_input f, :slug, class: "form-control", placeholder: "my-example-slug" %>
-    </div>
-    <small class="text-muted">should only contain lowercase, uppercase letters, hyphens and underscores.</small><br>
-    <%= error_tag f, :slug %>
-  </div>
+  <!-- <div class="form-group"> -->
+    <!-- <%= label f, :slug %> -->
+    <!-- <div class="input-group"> -->
+      <!-- <div class="input-group-addon"><%= SyncWeb.Endpoint.url() %></div> -->
+      <!-- <%= text_input f, :slug, class: "form-control", placeholder: "my-example-slug" %> -->
+    <!-- </div> -->
+    <!-- <small class="text-muted">should only contain lowercase, uppercase letters, hyphens and underscores.</small><br> -->
+    <!-- <%= error_tag f, :slug %> -->
+  <!-- </div> -->
 
   <div class="form-group mb-4">
     <%= label f, :password %>

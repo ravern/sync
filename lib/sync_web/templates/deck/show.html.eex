@@ -1,17 +1,1 @@
 <h2 class="mt-4"><%= @deck.title %></h2>
-<%= if @has_session do %>
-  <p>Already live.</p>
-  <%= link "View live session", to: session_path(@conn, :show, @deck.slug), class: "btn btn-primary text-white" %>
-<% else %>
-  <p>Enter the correct password to go live.</p>
-  <%= form_for @conn, session_path(@conn, :create), [as: :deck, class: "mt-4"], fn f-> %>
-    <%= hidden_input f, :slug, value: @deck.slug %>
-
-    <div class="form-group">
-      <%= label f, :password %>
-      <%= password_input f, :password, class: "form-control" %>
-    </div>
-
-    <%= submit "Go live!", class: "btn btn-primary" %>
-  <% end %>
-<% end %>
