@@ -18,4 +18,8 @@ defmodule Sync.Decks do
     |> Deck.changeset(attrs)
     |> Repo.insert()
   end
+
+  def find_deck!(slug) do
+    Repo.get_by!(Deck, slug: slug)
+  end
 end

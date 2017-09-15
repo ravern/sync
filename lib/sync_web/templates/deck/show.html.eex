@@ -1,0 +1,12 @@
+<h2 class="mt-4"><%= @deck.title %></h2>
+<p>Enter the correct password to go live.</p>
+<%= form_for @conn, session_path(@conn, :create), [as: :deck, class: "mt-4"], fn f-> %>
+  <%= hidden_input f, :slug, value: @deck.slug %>
+
+  <div class="form-group">
+    <%= label f, :password %>
+    <%= password_input f, :password, class: "form-control" %>
+  </div>
+
+  <%= submit "Go live!", class: "btn btn-primary" %>
+<% end %>

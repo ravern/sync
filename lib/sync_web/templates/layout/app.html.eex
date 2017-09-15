@@ -7,12 +7,24 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello Sync!</title>
+    <title><%= assigns[:title] || "Realtime image sync" %></title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
   <body>
     <div class="container">
+      <%= if msg = get_flash(@conn, :success) do %>
+        <div class="alert alert-success mt-4">
+          <%= msg %>
+        </div>
+      <% end %>
+
+      <%= if msg = get_flash(@conn, :error) do %>
+        <div class="alert alert-danger mt-4">
+          <%= msg %>
+        </div>
+      <% end %>
+
       <%= render @view_module, @view_template, assigns %>
     </div>
 
