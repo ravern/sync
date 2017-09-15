@@ -1,0 +1,10 @@
+<p class="mt-4">Password required to access this deck.</p>
+
+<%= form_for @conn, deck_path(@conn, :secure_show, @deck_id), [as: :deck, class: "mt-4"], fn f-> %>
+  <div class="form-group">
+    <%= label f, :password %>
+    <%= password_input f, :password, class: "form-control" %>
+  </div>
+
+  <%= submit "Go", class: "btn btn-primary" %>
+<% end %>

@@ -16,13 +16,12 @@ defmodule SyncWeb.Router do
   scope "/", SyncWeb do
     pipe_through :browser # Use the default browser stack
 
-    # Sessions
+    get "/", DeckController, :new
+    get "/decks/verify", DeckController, :verify
+    post "/decks/:id", DeckController, :secure_show
+    resources "/decks", DeckController, only: [:create, :show]
+
     resources "/sessions", SessionController, only: [:create]
     get "/:slug", SessionController, :show
-
-    # Decks
-    resources "/decks", DeckController, only: [:create, :show]
-    post "/decks/verify", DeckController, :verify
-    get "/", DeckController, :new
   end
 end
