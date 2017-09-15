@@ -31,7 +31,7 @@ defmodule SyncWeb.DeckController do
   def verify(conn, %{"deck" => %{"id" => id, "password" => password}}) do
     deck = Decks.find_deck!(id)
     if password == deck.password do
-      render conn, "show.html", deck: deck, title: deck.title
+      render conn, "show.html", deck: deck, title: deck.title, password: password
     else
       conn
       |> put_flash(:error, "Wrong password!")

@@ -16,6 +16,7 @@ defmodule SyncWeb.Router do
   scope "/", SyncWeb do
     pipe_through :browser # Use the default browser stack
 
+    # Sessions
     resources "/sessions", SessionController, only: [:create]
     get "/:slug", SessionController, :show
 
