@@ -1,6 +1,6 @@
 <h2 class="mt-4">Realtime image sync</h2>
 <p class="mb-0">With this app, you can upload a series of pictures, and let it play on other devices in complete sync with the main device.</p>
-<small class="text-danger">Do not upload sensitive data, passwords are stored in plaintext.</small>
+<small class="text-danger">Do not upload sensitive data and please do <b>not</b> use your real passwords, passwords are stored in plaintext.</small>
 
 <%= form_for @changeset, deck_path(@conn, :create), [class: "mt-4"], fn f-> %>
   <%= if @changeset.action do %>
@@ -17,7 +17,10 @@
 
   <div class="form-group">
     <%= label f, :slug %>
-    <%= text_input f, :slug, class: "form-control", placeholder: "my-example-slug" %>
+    <div class="input-group">
+      <div class="input-group-addon"><%= SyncWeb.Endpoint.url() %></div>
+      <%= text_input f, :slug, class: "form-control", placeholder: "my-example-slug" %>
+    </div>
     <small class="text-muted">should only contain lowercase, uppercase letters, hyphens and underscores.</small><br>
     <%= error_tag f, :slug %>
   </div>

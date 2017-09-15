@@ -8,8 +8,8 @@ defmodule SyncWeb.SessionController do
     deck = Decks.find_deck!(slug)
     if password == deck.password do
       # Create the session
-      # Sessions.create_session(deck)
-      
+      Sessions.start_session(deck)
+
       # Redirect to the session url
       conn
       |> render("show.html")

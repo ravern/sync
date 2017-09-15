@@ -7,6 +7,8 @@ defmodule Sync.Application do
     children = [
       supervisor(Sync.Repo, []),
       supervisor(SyncWeb.Endpoint, []),
+      supervisor(Registry, [:unique, :session_process_registry]),
+      supervisor(Sync.Sessions, []),
     ]
 
     opts = [strategy: :one_for_one, name: Sync.Supervisor]
