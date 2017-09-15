@@ -19,4 +19,11 @@ defmodule Sync.Sessions do
   def start_session(deck) do
     Supervisor.start_child(__MODULE__, [deck])
   end
+
+  def session_exists?(slug) do
+    case Registry.lookup(:session_process_registry, slug) do
+      [] -> false
+      _ -> true
+    end
+  end
 end

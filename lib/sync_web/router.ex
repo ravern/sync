@@ -17,6 +17,7 @@ defmodule SyncWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     resources "/sessions", SessionController, only: [:create]
+    get "/:slug", SessionController, :show
     resources "/decks", DeckController, only: [:create, :show], param: "slug"
     get "/", DeckController, :new
   end

@@ -1,6 +1,6 @@
 defmodule SyncWeb.DeckController do
   use SyncWeb, :controller
-  alias Sync.Decks
+  alias Sync.{Sessions, Decks}
 
   def new(conn, _params) do
     changeset = Decks.change_deck()
@@ -17,8 +17,10 @@ defmodule SyncWeb.DeckController do
   end
 
   # Preview the deck before "going live"
+  # If it's already live, provide a link to view it
   def show(conn, %{"slug" => slug}) do
     deck = Decks.find_deck!(slug)
-    render conn, "show.html", deck: deck, title: deck.title
+    has_session = Sessions.session_exists?(slug)
+    render conn, "show.html", deck: deck, title: deck.title, has_session: has_session
   end
 end

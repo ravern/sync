@@ -7,12 +7,8 @@ defmodule SyncWeb.SessionController do
   def create(conn, %{"deck" => %{"slug" => slug, "password" => password}}) do
     deck = Decks.find_deck!(slug)
     if password == deck.password do
-      # Create the session
       Sessions.start_session(deck)
-
-      # Redirect to the session url
-      conn
-      |> render("show.html")
+      redirect(conn, to: session_path(conn, :show, deck.slug))
     else
       conn
       |> put_flash(:error, "Wrong password!")
@@ -20,7 +16,13 @@ defmodule SyncWeb.SessionController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-
+  def show(conn, %{"slug" => slug}) do
+    if Sessions.session_exists?(slug) do
+      render(conn, "show.html", slug: slug)
+    else
+      conn
+      |> put_status(:not_found)
+      |> render(SyncWeb.ErrorView, "404.html")
+    end
   end
 end
