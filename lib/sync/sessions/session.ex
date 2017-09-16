@@ -15,4 +15,26 @@ defmodule Sync.Sessions.Session do
   defp via_tuple(slug) do
     {:via, Registry, {@registry_name, slug}}
   end
+
+  def exists?(slug) do
+    case get(slug) do
+      {:ok, _session} ->
+        true
+      {:error, :not_found} ->
+        false
+    end
+  end
+
+  def get(slug) do
+    case Registry.lookup(@registry_name, slug) do
+      [{pid, _}] ->
+        {:ok, GenServer.call(pid, :get)}
+      _ ->
+        :error
+    end
+  end
+
+  def handle_call(:get, _from, session) do
+    {:reply, session, session}
+  end
 end

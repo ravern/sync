@@ -19,29 +19,35 @@ defmodule Sync.Sessions do
   auto-generates a slug if it doesn't exist or
   if it isn't specified
   """
-  def start_session(%{slug: user_slug} = user_session_params) do
+  def start_session(%{slug: user_slug} = session_params) do
     # Generate slug if user did not specify
     slug = Slug.validate(user_slug) || Slug.generate()
-    session_params = %{user_session_params | slug: slug}
 
-    if session_exists?(slug) do
-      # Try again, with new generated slug
-      start_session(session_params)
-    else
-      Supervisor.start_child(__MODULE__, [session_params])
-      # Return the slug
-      slug
+    case find_session(slug) do
+      {:ok, _session} ->
+        # Try again, with new generated slug
+        start_session(%{session_params | slug: nil})
+      :error ->
+        Supervisor.start_child(__MODULE__, [%{session_params | slug: slug}])
+        # Return the slug
+        slug
     end
   end
 
   @doc """
-  Returns a boolean whether a session with
-  the specified slug exists
+  Returns `{:ok, session}` if exists or
+  `{:error, :not_found}` if it doesn't
   """
-  def session_exists?(slug) do
-    case Registry.lookup(:session_process_registry, slug) do
-      [] -> false
-      _ -> true
+  def find_session(slug), do: Session.get(slug)
+
+  @doc """
+  Same as `get_session/1`, but raises an
+  error if not found
+  """
+  def find_session!(slug) do
+    case Session.get(slug) do
+      {:ok, session} -> session
+      :error -> raise Sync.Sessions.NoSessionFoundError, slug: slug
     end
   end
 end

@@ -1,5 +1,5 @@
 <h2 class="mt-4">Realtime image sync</h2>
-<p class="mb-0">With this app, you can upload a series of pictures, and let it play on other devices in complete sync with the main device.</p>
+<p class="mb-0">With this website, you can upload a series of pictures, and let it play on other devices in complete sync with the main device.</p>
 <small class="text-danger">Do not upload sensitive data and please do <b>not</b> use your real passwords, passwords are stored in plaintext.</small>
 
 <%= form_for @changeset, deck_path(@conn, :create), [class: "mt-4"], fn f-> %>

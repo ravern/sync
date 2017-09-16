@@ -30,11 +30,11 @@ defmodule SyncWeb.DeckController do
   def secure_show(conn, %{"id" => id, "deck" => %{"password" => password}}) do
     deck = Decks.find_deck!(id)
     if password == deck.password do
-      render conn, "show.html", deck: deck, title: deck.title
+      render conn, "show.html", deck: deck, title: deck.title, password: password
     else
       conn
       |> put_flash(:error, "Wrong password!")
-      |> render("enter_password.html", deck: deck, title: deck.title)
+      |> render("verify.html", deck_id: deck.id)
     end
   end
 

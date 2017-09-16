@@ -16,5 +16,11 @@
     <small class="text-muted">should only contain lowercase, uppercase letters, hyphens and underscores.</small><br>
   </div>
 
+  <div class="form-group">
+    <%= label f, :password %>
+    <%= password_input f, :password, class: "form-control" %>
+    <small class="text-muted">use this password to prevent unauthorized users from viewing your session</small><br>
+  </div>
+
   <%= submit "Go live!", class: "btn btn-primary" %>
 <% end %>

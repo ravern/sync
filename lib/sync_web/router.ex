@@ -22,6 +22,8 @@ defmodule SyncWeb.Router do
     resources "/decks", DeckController, only: [:create, :show]
 
     resources "/sessions", SessionController, only: [:create]
+    get "/sessions/verify", SessionController, :verify
+    post "/:slug", SessionController, :secure_show
     get "/:slug", SessionController, :show
   end
 end
