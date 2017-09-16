@@ -1,1 +1,4 @@
 <%= @session.slug %>
+<%= for image <- @session.deck.images do %>
+  <img src="<%= SyncWeb.Image.url({image.image, image}) %>"/>
+<% end %>

@@ -37,7 +37,7 @@ defmodule Sync.Decks do
   # Runs the transaction and handles the result
   defp run_create_deck_transaction(%Ecto.Multi{} = multi) do
     case Repo.transaction(multi) do
-      {:ok, %{deck: deck}} -> {:ok, deck}
+      {:ok, %{deck: deck}} -> {:ok, Repo.preload(deck, :images)}
       {:error, :deck, changeset, _} -> {:error, changeset}
       _ -> {:error, :upload_error}
     end
@@ -49,5 +49,9 @@ defmodule Sync.Decks do
 
   Raises Ecto.NoResultsError if not found
   """
-  def find_deck!(id), do: Repo.get!(Deck, id)
+  def find_deck!(id) do
+    Deck
+    |> Repo.get!(id)
+    |> Repo.preload(:images)
+  end
 end
