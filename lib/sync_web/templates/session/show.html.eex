@@ -1,1 +1,1 @@
-<%= @slug %>
+<%= @session.slug %>

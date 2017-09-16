@@ -1,17 +1,26 @@
 <h2 class="mt-4"><%= @deck.title %></h2>
-<%= if @has_session do %>
-  <p>Already live.</p>
-  <%= link "View live session", to: session_path(@conn, :show, @deck.slug), class: "btn btn-primary text-white" %>
-<% else %>
-  <p>Enter the correct password to go live.</p>
-  <%= form_for @conn, session_path(@conn, :create), [as: :deck, class: "mt-4"], fn f-> %>
-    <%= hidden_input f, :slug, value: @deck.slug %>
+<p>You can customize the link to make it easier for others to access your live feed.</p>
 
-    <div class="form-group">
-      <%= label f, :password %>
-      <%= password_input f, :password, class: "form-control" %>
-    </div>
-
-    <%= submit "Go live!", class: "btn btn-primary" %>
+<%= form_for @conn, session_path(@conn, :create), [as: :deck, class: "mt-4"], fn f-> %>
+  <%= hidden_input f, :id, value: @deck.id %>
+  <%= if assigns[:password] do %>
+    <%= hidden_input f, :password, value: @password %>
   <% end %>
+
+  <div class="form-group">
+    <%= label f, :slug, "Custom link" %>
+    <div class="input-group">
+      <div class="input-group-addon"><%= SyncWeb.Endpoint.url() %></div>
+      <%= text_input f, :slug, class: "form-control", placeholder: "my-example-slug" %>
+    </div>
+    <small class="text-muted">should only contain lowercase, uppercase letters, hyphens and underscores.</small><br>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :password %>
+    <%= password_input f, :password, class: "form-control" %>
+    <small class="text-muted">use this password to prevent unauthorized users from viewing your session</small><br>
+  </div>
+
+  <%= submit "Go live!", class: "btn btn-primary" %>
 <% end %>

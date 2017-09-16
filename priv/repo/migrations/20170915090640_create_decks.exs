@@ -3,13 +3,12 @@ defmodule Sync.Repo.Migrations.CreateDecks do
 
   def change do
     create table(:decks) do
-      add :title, :string
-      add :slug, :string
+      add :title, :citext
       add :password, :string
 
       timestamps()
     end
 
-    create unique_index(:decks, [:slug])
+    create unique_index(:decks, [:title])
   end
 end

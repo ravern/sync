@@ -19,7 +19,11 @@ defmodule Sync.Decks do
     |> Repo.insert()
   end
 
-  def find_deck!(slug) do
-    Repo.get_by!(Deck, slug: slug)
-  end
+  @doc """
+  Gets the deck with the specified id
+  from the database.
+
+  Raises Ecto.NoResultsError if not found
+  """
+  def find_deck!(id), do: Repo.get!(Deck, id)
 end
