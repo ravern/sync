@@ -1,6 +1,6 @@
 defmodule SyncWeb.DeckController do
   use SyncWeb, :controller
-  alias Sync.{Sessions, Decks}
+  alias Sync.Decks
 
   plug :scrub_params, "deck" when action in [:secure_show]
 
@@ -10,11 +10,21 @@ defmodule SyncWeb.DeckController do
   end
 
   def create(conn, %{"deck" => deck_params}) do
-    case Decks.create_deck(deck_params) do
-      {:ok, deck} ->
-        redirect conn, to: deck_path(conn, :show, deck)
-      {:error, changeset} ->
-        render conn, "new.html", changeset: changeset
+    if !deck_params["images"] do
+      conn
+      |> put_flash(:error, "You need to put some images in!")
+      |> redirect(to: deck_path(conn, :new))
+    else
+      case Decks.create_deck(deck_params) do
+        {:ok, deck} ->
+          redirect conn, to: deck_path(conn, :show, deck)
+        {:error, changeset} ->
+          render conn, "new.html", changeset: changeset
+        {:error, :upload_error} ->
+          conn
+          |> put_flash(:error, "Error occured while uploading the images.")
+          |> redirect(to: deck_path(conn, :new))
+      end
     end
   end
 

@@ -2,24 +2,24 @@ defmodule SyncWeb.SessionController do
   use SyncWeb, :controller
   alias Sync.{Sessions, Decks}
 
-  plug :scrub_params, "deck" when action in [:create]
+  plug :scrub_params, "session" when action in [:create]
   plug :put_session when action in [:secure_show, :show]
 
-  def create(conn, %{"deck" => %{"id" => id, "slug" => slug} = deck_params}) do
-    password = deck_params["password"]
-    deck = Decks.find_deck!(id)
+  def create(conn, %{"session" => %{"deck_id" => deck_id, "password" => password, "slug" => slug} = session_params}) do
+    deck_password = session_params["deck_password"]
+    deck = Decks.find_deck!(deck_id)
 
-    if password == deck.password do
+    if deck_password == deck.password do
       slug = Sessions.start_session(%{slug: slug, deck: deck, password: password})
       redirect(conn, to: session_path(conn, :show, slug))
     else
       conn
       |> put_flash(:error, "Wrong password!")
-      |> redirect(to: deck_path(conn, :show, deck.id))
+      |> redirect(to: deck_path(conn, :verify, deck_id: deck_id))
     end
   end
 
-  def show(conn, %{"slug" => slug}) do
+  def show(conn, _params) do
     session = conn.assigns.session
     if session.password do
       redirect conn, to: session_path(conn, :verify, session_slug: session.slug)
@@ -28,7 +28,7 @@ defmodule SyncWeb.SessionController do
     end
   end
 
-  def secure_show(conn, %{"slug" => slug, "session" => %{"password" => password}}) do
+  def secure_show(conn, %{"session" => %{"password" => password}}) do
     session = conn.assigns.session
     if password == session.password do
       render conn, "show.html", session: session, title: "LIVE: #{session.deck.title}"

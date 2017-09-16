@@ -2,7 +2,7 @@
 <p class="mb-0">With this website, you can upload a series of pictures, and let it play on other devices in complete sync with the main device.</p>
 <small class="text-danger">Do not upload sensitive data and please do <b>not</b> use your real passwords, passwords are stored in plaintext.</small>
 
-<%= form_for @changeset, deck_path(@conn, :create), [class: "mt-4"], fn f-> %>
+<%= form_for @changeset, deck_path(@conn, :create), [multipart: true, class: "mt-4"], fn f-> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
       You probably messed up your input.
@@ -13,6 +13,12 @@
     <%= label f, :title %><span class="text-danger">*</span>
     <%= text_input f, :title, class: "form-control" %>
     <%= error_tag f, :title %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :images %><span class="text-danger">*</span>
+    <%= file_input f, :images, class: "form-control-file", multiple: true %>
+    <%= error_tag f, :images %>
   </div>
 
   <div class="form-group mb-4">
