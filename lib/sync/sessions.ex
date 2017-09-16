@@ -6,6 +6,8 @@ defmodule Sync.Sessions do
   use Supervisor
   alias Sync.Sessions.{Slug, Session}
 
+  @registry_name :session_process_registry
+
   def start_link do
     Supervisor.start_link(__MODULE__, nil, name: __MODULE__)
   end
@@ -38,14 +40,21 @@ defmodule Sync.Sessions do
   Returns `{:ok, session}` if exists or
   `{:error, :not_found}` if it doesn't
   """
-  def find_session(slug), do: Session.get(slug)
+  def find_session(slug) do
+    case Registry.lookup(@registry_name, slug) do
+      [{pid, _}] ->
+        {:ok, Session.get(pid)}
+      _ ->
+        :error
+    end
+  end
 
   @doc """
   Same as `get_session/1`, but raises an
   error if not found
   """
   def find_session!(slug) do
-    case Session.get(slug) do
+    case find_session(slug) do
       {:ok, session} -> session
       :error -> raise Sync.Sessions.NoSessionFoundError, slug: slug
     end

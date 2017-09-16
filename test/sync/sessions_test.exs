@@ -7,7 +7,8 @@ defmodule Sync.SessionsTest do
 
   setup do
     deck = Decks.create_deck(%{
-      title: "Test deck",
+      "title" => "Test deck",
+      "images" => [],
     })
     %{deck: deck}
   end

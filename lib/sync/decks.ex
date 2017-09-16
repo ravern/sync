@@ -34,9 +34,6 @@ defmodule Sync.Decks do
     |> run_create_deck_transaction()
   end
 
-  defp create_image({image, idx}, {multi, deck}) do
-  end
-
   # Runs the transaction and handles the result
   defp run_create_deck_transaction(%Ecto.Multi{} = multi) do
     case Repo.transaction(multi) do

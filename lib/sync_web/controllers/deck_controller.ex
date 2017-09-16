@@ -18,12 +18,12 @@ defmodule SyncWeb.DeckController do
       case Decks.create_deck(deck_params) do
         {:ok, deck} ->
           redirect conn, to: deck_path(conn, :show, deck)
-        {:error, changeset} ->
-          render conn, "new.html", changeset: changeset
         {:error, :upload_error} ->
           conn
           |> put_flash(:error, "Error occured while uploading the images.")
           |> redirect(to: deck_path(conn, :new))
+        {:error, changeset} ->
+          render conn, "new.html", changeset: changeset
       end
     end
   end
