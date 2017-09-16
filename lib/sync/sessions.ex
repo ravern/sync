@@ -11,23 +11,24 @@ defmodule Sync.Sessions do
   end
 
   def init(_) do
-    supervise([worker(Sync.Sessions.Session, [])], strategy: :simple_one_for_one)
+    supervise([worker(Session, [])], strategy: :simple_one_for_one)
   end
 
   @doc """
-  Starts a session using a use-specified slug,
+  Starts a session using a user-specified slug,
   auto-generates a slug if it doesn't exist or
   if it isn't specified
   """
-  def start_session(deck, user_slug \\ nil) do
+  def start_session(%{slug: user_slug} = user_session_params) do
     # Generate slug if user did not specify
     slug = Slug.validate(user_slug) || Slug.generate()
+    session_params = %{user_session_params | slug: slug}
 
     if session_exists?(slug) do
       # Try again, with new generated slug
-      start_session(deck)
+      start_session(session_params)
     else
-      Supervisor.start_child(__MODULE__, [deck, slug])
+      Supervisor.start_child(__MODULE__, [session_params])
       # Return the slug
       slug
     end

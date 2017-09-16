@@ -23,6 +23,7 @@ defmodule Sync.Sessions.Slug do
   Returns the slug on success and nil on failure
   """
   def validate(slug) when is_nil(slug), do: nil
+  def validate(""), do: nil
   def validate(slug) do
     if String.match?(slug, @alphabet_regex) do
       slug

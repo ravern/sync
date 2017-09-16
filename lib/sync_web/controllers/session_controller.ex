@@ -9,7 +9,7 @@ defmodule SyncWeb.SessionController do
     deck = Decks.find_deck!(id)
 
     if password == deck.password do
-      slug = Sessions.start_session(deck, slug)
+      slug = Sessions.start_session(%{slug: slug, deck: deck})
       redirect(conn, to: session_path(conn, :show, slug))
     else
       conn
