@@ -1,7 +1,5 @@
 defmodule SyncWeb.Image do
   use Arc.Definition
-
-  # Include ecto support (requires package arc_ecto installed):
   use Arc.Ecto.Definition
 
   @versions [:original]

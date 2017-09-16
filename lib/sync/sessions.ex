@@ -56,7 +56,7 @@ defmodule Sync.Sessions do
   def find_session!(slug) do
     case find_session(slug) do
       {:ok, session} -> session
-      :error -> raise Sync.Sessions.NoSessionFoundError, slug: slug
+      :error -> raise Sync.NoSessionFoundError, slug: slug
     end
   end
 end

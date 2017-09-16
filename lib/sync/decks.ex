@@ -21,17 +21,20 @@ defmodule Sync.Decks do
 
     attrs["images"]
     |> Enum.with_index()
-    |> Enum.reduce(multi, fn {image, idx}, multi->
-         Multi.run(multi, "image#{idx}", fn %{deck: deck}->
-           image_changeset =
-             deck
-             |> Ecto.build_assoc(:images)
-             |> Image.changeset(%{image: image})
-
-           Repo.insert(image_changeset)
-         end)
-       end)
+    |> Enum.reduce(multi, &insert_image/2)
     |> run_create_deck_transaction()
+  end
+
+  # Inserts an image
+  defp insert_image({image, idx}, multi) do
+    Multi.run(multi, "image#{idx}", fn %{deck: deck}->
+      image_changeset =
+        deck
+        |> Ecto.build_assoc(:images)
+        |> Image.changeset(%{image: image})
+
+      Repo.insert(image_changeset)
+    end)
   end
 
   # Runs the transaction and handles the result
