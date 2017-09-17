@@ -25,14 +25,11 @@ defmodule Sync.Sessions do
     # Generate slug if user did not specify
     slug = Slug.validate(user_slug) || Slug.generate()
 
-    case find_session(slug) do
-      {:ok, _session} ->
-        # Try again, with new generated slug
-        start_session(%{session_params | slug: nil})
-      :error ->
-        Supervisor.start_child(__MODULE__, [%{session_params | slug: slug}])
-        # Return the slug
-        slug
+    # Insert and use the insert error
+    # This prevents race conditions
+    case Supervisor.start_child(__MODULE__, [%{session_params | slug: slug}]) do
+      {:ok, _pid} -> slug
+      {:error, _} -> start_session(%{session_params | slug: nil})
     end
   end
 

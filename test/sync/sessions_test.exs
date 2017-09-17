@@ -2,25 +2,54 @@ defmodule Sync.SessionsTest do
   use Sync.DataCase
   alias Sync.{Sessions, Decks}
 
-  @test_slug "test-slug"
-  @invalid_slug "doesnt-exist"
+  @deck_attrs %{"title" => "Valid title!", "images" => []}
 
-  setup do
-    deck = Decks.create_deck(%{
-      "title" => "Test deck",
-      "images" => [],
-    })
-    %{deck: deck}
+  defp create_deck! do
+    {:ok, deck} = Decks.create_deck(@deck_attrs)
+    deck
   end
 
-  describe "get_session/1" do
-    test "returns session if found", %{deck: deck} do
-      Sessions.start_session(%{deck: deck, slug: @test_slug})
-      assert {:ok, _session} = Sessions.find_session(@test_slug)
+  @session_attrs %{slug: nil}
+
+  defp start_session(deck, attrs \\ %{}) do
+    attrs
+    |> Enum.into(@session_attrs)
+    |> Enum.into(%{deck: deck})
+    |> Sessions.start_session()
+  end
+
+  @generated_slug_length 6
+
+  describe "session creation" do
+    test "generates a slug if none given" do
+      deck = create_deck!()
+      slug = start_session(deck)
+      assert String.length(slug) == @generated_slug_length
     end
 
-    test "returns error if not found" do
-      assert :error = Sessions.find_session(@invalid_slug)
+    test "uses user-inputted slug if given" do
+      deck = create_deck!()
+      slug = start_session(deck, %{slug: "test-slug-1"})
+      assert slug == "test-slug-1"
+    end
+
+    test "generates a slug if duplicate is given" do
+      deck = create_deck!()
+      start_session(deck, %{slug: "test-slug-2"})
+      slug = start_session(deck, %{slug: "test-slug-2"}) # Duplicate
+      assert String.length(slug) == @generated_slug_length
+    end
+  end
+
+  describe "finding a session" do
+    test "is successful with valid slug" do
+      deck = create_deck!()
+      slug = start_session(deck)
+      assert {:ok, _} = Sessions.find_session(slug)
+    end
+
+    test "is unsuccessful with invalid slug" do
+      assert :error = Sessions.find_session("a")
     end
   end
 end

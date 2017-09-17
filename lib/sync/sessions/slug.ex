@@ -4,7 +4,7 @@ defmodule Sync.Sessions.Slug do
   """
 
   @alphabet "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-  @alphabet_regex ~r/^([a-zA-Z-_]+)$/
+  @alphabet_regex ~r/^([a-zA-Z1-9-_]+)$/
 
   @doc """
   Generates a slug using the @alphabet module
@@ -13,6 +13,7 @@ defmodule Sync.Sessions.Slug do
   def generate do
     @alphabet
     |> String.split("")
+    |> List.delete("")
     |> Enum.take_random(6)
     |> Enum.join("")
   end
