@@ -21,20 +21,21 @@ defmodule Sync.SessionsTest do
   @generated_slug_length 6
 
   describe "session creation" do
-    test "generates a slug if none given" do
-      deck = create_deck!()
+    setup do
+      %{deck: create_deck!()}
+    end
+
+    test "generates a slug if none given", %{deck: deck} do
       slug = start_session(deck)
       assert String.length(slug) == @generated_slug_length
     end
 
-    test "uses user-inputted slug if given" do
-      deck = create_deck!()
+    test "uses user-inputted slug if given", %{deck: deck} do
       slug = start_session(deck, %{slug: "test-slug-1"})
       assert slug == "test-slug-1"
     end
 
-    test "generates a slug if duplicate is given" do
-      deck = create_deck!()
+    test "generates a slug if duplicate is given", %{deck: deck} do
       start_session(deck, %{slug: "test-slug-2"})
       slug = start_session(deck, %{slug: "test-slug-2"}) # Duplicate
       assert String.length(slug) == @generated_slug_length
@@ -50,6 +51,25 @@ defmodule Sync.SessionsTest do
 
     test "is unsuccessful with invalid slug" do
       assert :error = Sessions.find_session("a")
+    end
+  end
+
+  describe "session state" do
+    setup do
+      %{deck: create_deck!()}
+    end
+
+    test "can increment", %{deck: deck} do
+      slug = start_session(deck, %{slug: "test-slug-3"})
+      page = Sessions.find_session!(slug).page
+      Sessions.increment_session_page(slug)
+      assert page + 1 == Sessions.find_session!(slug).page
+    end
+
+    test "cannot decrement past 0", %{deck: deck} do
+      slug = start_session(deck, %{slug: "test-slug-4"})
+      Sessions.decrement_session_page(slug)
+      assert 0 == Sessions.find_session!(slug).page
     end
   end
 end

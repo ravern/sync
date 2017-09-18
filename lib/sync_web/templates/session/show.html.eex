@@ -1,4 +1,9 @@
-<%= @session.slug %>
-<%= for image <- @session.deck.images do %>
-  <img src="<%= SyncWeb.Image.url({image.image, image}) %>"/>
-<% end %>
+<script>window.sessionSlug = "<%= @conn.params["slug"] %>"</script>
+<div class="d-flex align-items-center justify-content-center" id="images" style="height: 100vh;">
+  <%= for {image, idx} <- Enum.with_index(@session.deck.images) do %>
+    <img
+     src="<%= SyncWeb.Image.url({image.image, image}) %>"
+     style="<%= if idx != 0, do: "display: none" %>"
+     />
+   <% end %>
+</div>

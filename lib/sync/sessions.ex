@@ -33,27 +33,48 @@ defmodule Sync.Sessions do
     end
   end
 
-  @doc """
-  Returns `{:ok, session}` if exists or
-  `{:error, :not_found}` if it doesn't
-  """
-  def find_session(slug) do
+  defp find_session_pid(slug) do
     case Registry.lookup(@registry_name, slug) do
       [{pid, _}] ->
-        {:ok, Session.get(pid)}
+        {:ok, pid}
       _ ->
         :error
     end
   end
 
   @doc """
-  Same as `get_session/1`, but raises an
+  Returns `{:ok, session}` if exists or
+  `{:error, :not_found}` if it doesn't
+  """
+  def find_session(slug) do
+    case find_session_pid(slug) do
+      {:ok, pid} -> {:ok, Session.get(pid)}
+      :error -> :error
+    end
+  end
+
+  @doc """
+  Same as `find_session/1`, but raises an
   error if not found
   """
   def find_session!(slug) do
     case find_session(slug) do
       {:ok, session} -> session
       :error -> raise Sync.NoSessionFoundError, slug: slug
+    end
+  end
+
+  def increment_session_page(slug) do
+    case find_session_pid(slug) do
+      {:ok, pid} -> Session.increment_page(pid)
+      :error -> :error
+    end
+  end
+
+  def decrement_session_page(slug) do
+    case find_session_pid(slug) do
+      {:ok, pid} -> Session.decrement_page(pid)
+      :error -> :error
     end
   end
 end

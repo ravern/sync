@@ -2,7 +2,7 @@ defmodule SyncWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", SyncWeb.RoomChannel
+  channel "session:*", SyncWeb.SessionChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
