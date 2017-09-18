@@ -5,8 +5,9 @@ defmodule SyncWeb.DeckController do
   plug :scrub_params, "deck" when action in [:secure_show]
 
   def new(conn, _params) do
+    decks = Decks.list_decks()
     changeset = Decks.change_deck()
-    render conn, "new.html", changeset: changeset
+    render conn, "new.html", changeset: changeset, decks: decks
   end
 
   def create(conn, %{"deck" => deck_params}) do

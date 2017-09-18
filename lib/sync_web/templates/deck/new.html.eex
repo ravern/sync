@@ -29,3 +29,8 @@
 
   <%= submit "Create new deck", class: "btn btn-primary" %>
 <% end %>
+
+<h3 class="mt-5 mb-4">List of decks</h3>
+<%= for deck <- @decks do %>
+  <p class="mb-2"><%= link deck.title, to: deck_path(@conn, :show, deck) %></p>
+<% end %>

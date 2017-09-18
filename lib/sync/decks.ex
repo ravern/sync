@@ -37,6 +37,10 @@ defmodule Sync.Decks do
     end)
   end
 
+  def list_decks() do
+    Repo.all(Deck)
+  end
+
   # Runs the transaction and handles the result
   defp run_create_deck_transaction(%Ecto.Multi{} = multi) do
     case Repo.transaction(multi) do
