@@ -56,5 +56,3 @@ config :sync, Sync.Repo,
   database: "sync_dev",
   hostname: "localhost",
   pool_size: 10
-
-import_config "dev.secret.exs"

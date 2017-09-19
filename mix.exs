@@ -44,6 +44,9 @@ defmodule Sync.Mixfile do
 
       {:arc, "~> 0.8.0"},
       {:arc_ecto, "~> 0.7.0"},
+
+      {:ex_aws, "~> 1.1", only: :prod},
+      {:sweet_xml, "~> 0.6", only: :prod},
     ]
   end
 

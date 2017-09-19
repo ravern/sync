@@ -15,8 +15,16 @@ use Mix.Config
 # which you typically run after static files are built.
 config :sync, SyncWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: "sync.ravernkoh.me", port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE")
+
+# Configure your database
+config :sync, Sync.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: System.get_env("DATABASE_URL"),
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  ssl: true
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -25,6 +33,10 @@ config :logger, level: :info
 config :arc,
   storage: Arc.Storage.S3, # or Arc.Storage.Local
   bucket: {:system, "AWS_S3_BUCKET"} # if using Amazon S3
+
+config :ex_aws,
+  access_key_id: [{:system, "AWS_ACCESS_KEY_ID"}, :instance_role],
+  secret_access_key: [{:system, "AWS_SECRET_ACCESS_KEY"}, :instance_role]
 
 # ## SSL Support
 #
@@ -63,7 +75,3 @@ config :arc,
 #
 #     config :sync, SyncWeb.Endpoint, server: true
 #
-
-# Finally import the config/prod.secret.exs
-# which should be versioned separately.
-import_config "prod.secret.exs"
