@@ -46,6 +46,9 @@ config :ex_aws,
     region: "ap-southeast-1",
   ]
 
+config :sync, SyncWeb.Endpoint,
+  check_origin: ["http://sync.ravernkoh.me", "https://realtime-image-sync.herokuapp.com"]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
