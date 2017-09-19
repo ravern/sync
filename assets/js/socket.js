@@ -17,9 +17,9 @@ channel.join()
 channel.on("page", payload => {
   $('#images').children('img').each(function(i) {
     if (payload.value == i) {
-      this.style = "";
+      this.setAttribute('style', '');
     } else {
-      this.style = "display:none";
+      this.setAttribute('style', 'display:none');
     }
   })
 });
